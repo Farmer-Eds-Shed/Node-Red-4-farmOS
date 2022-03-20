@@ -1,0 +1,114 @@
+[
+    {
+        "id": "895a366cbeeeb85e",
+        "type": "subflow",
+        "name": "farmOS Oauth2",
+        "info": "",
+        "category": "farmOS",
+        "in": [
+            {
+                "x": 60,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "c1c5cb7804c3d9d5"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1000,
+                "y": 140,
+                "wires": [
+                    {
+                        "id": "fa30edb753b13f74",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#C7E9C0",
+        "icon": "node-red-contrib-oauth2/oauth2.svg"
+    },
+    {
+        "id": "f7821dcb8df5c66d",
+        "type": "oauth2",
+        "z": "895a366cbeeeb85e",
+        "name": "",
+        "container": "payload",
+        "access_token_url": "http://localhost/oauth2/token",
+        "grant_type": "set_by_credentials",
+        "username": "",
+        "password": "",
+        "client_id": "",
+        "client_secret": "",
+        "scope": "farmos_restws_access",
+        "rejectUnauthorized": true,
+        "headers": {},
+        "x": 630,
+        "y": 140,
+        "wires": [
+            [
+                "fa30edb753b13f74"
+            ]
+        ]
+    },
+    {
+        "id": "fa30edb753b13f74",
+        "type": "function",
+        "z": "895a366cbeeeb85e",
+        "name": "Save OAuth Token",
+        "func": "if (msg.payload.access_token) {\n    var token = msg.payload.access_token;\n    var refresh = msg.payload.refresh_token;\n    global.set('token', token);\n    flow.set('refresh', refresh);\n    Time = new Date()\n    msg.bearer = msg.payload;\n    msg.payload = \"Access Granted \" + Time;\n} else {\n    msg.error = msg.payload;\n    msg.payload = msg.error.error;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f4b123b4f2d28eba",
+        "type": "function",
+        "z": "895a366cbeeeb85e",
+        "name": "Refresh Token",
+        "func": "var refresh = flow.get('refresh');\n\nmsg.oauth2Request = {\n    \"access_token_url\": global.get('farmOSurl').concat('/oauth/token'), \n    \"credentials\": {\n        \"grant_type\": \"refresh_token\",\n        \"refresh_token\": refresh,\n        \"client_id\": msg.payload.client_id,\n        \"client_secret\": msg.payload.client_secret,\n        \"scope\": msg.payload.scope\n    }\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 80,
+        "wires": [
+            [
+                "f7821dcb8df5c66d"
+            ]
+        ]
+    },
+    {
+        "id": "c1c5cb7804c3d9d5",
+        "type": "function",
+        "z": "895a366cbeeeb85e",
+        "name": "Creat OAuth2Request",
+        "func": "var farmOSurl = msg.payload.url\nglobal.set('farmOSurl', farmOSurl);\n\nmsg.oauth2Request = { \n        \"access_token_url\": msg.payload.url.concat(\"/oauth/token\"), \n        \"credentials\": {\n            \"grant_type\": \"password\",\n            \"username\": msg.payload.username,\n            \"password\": msg.payload.password,\n            \"client_id\": msg.payload.client_id,\n            \"client_secret\": msg.payload.client_secret,\n            \"scope\": msg.payload.scope\n        }\n    };\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 140,
+        "wires": [
+            [
+                "f7821dcb8df5c66d"
+            ]
+        ]
+    }
+]
