@@ -1,0 +1,344 @@
+[
+    {
+        "id": "206496a20cb8cbbd",
+        "type": "subflow",
+        "name": "Read CSV File",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 60,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "1a96a56f081f1473"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 520,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "d703546acbbc37fb",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "1a96a56f081f1473",
+        "type": "file in",
+        "z": "206496a20cb8cbbd",
+        "name": "",
+        "filename": "",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 200,
+        "y": 80,
+        "wires": [
+            [
+                "d703546acbbc37fb"
+            ]
+        ]
+    },
+    {
+        "id": "d703546acbbc37fb",
+        "type": "csv to json ext",
+        "z": "206496a20cb8cbbd",
+        "name": "",
+        "version": "0.1",
+        "source": "filename",
+        "delimiter": ",",
+        "quote": "\"",
+        "escape": "\"",
+        "ignoreEmpty": false,
+        "checkType": false,
+        "trim": false,
+        "noheader": false,
+        "includeColumns": "",
+        "headers": "",
+        "debug": false,
+        "x": 390,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "01518f98870b2ad5",
+        "type": "tab",
+        "label": "farmOS API",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "ba196730395d6e55",
+        "type": "inject",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "props": [
+            {
+                "p": "filename",
+                "v": "/Node Red/DAFM-Breeds.csv",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 280,
+        "wires": [
+            [
+                "cf1cf6ea8cdd547d"
+            ]
+        ]
+    },
+    {
+        "id": "1d3626589559453d",
+        "type": "function",
+        "z": "01518f98870b2ad5",
+        "name": "farmOS API Json from CSV",
+        "func": "//Declare Variables\nlet outputMsgs = [];\nvar breed,code;\nvar asset\n\n//Start loop to Read CSV one line at a time\nmsg.payload.forEach(data => {\n\n//extract data from CSV\nbreed = data.Breed;\ncode = data.Code\n\n\n\n\n//Create Asset Object \nasset = {\"data\":\n\t\t{\n\t\t\t\"type\": \"taxonomy_term--animal_type\",\n\t\t\t\"attributes\": {\n\t\t\t\t\"status\": true,\n\t\t\t\t\"name\": code,\n\t\t\t\t\"description\": {\n\t\t\t\t\t\"value\": breed,\n\t\t\t\t\t\"format\": \"default\",\n\t\t\t\t}\n\t\t\t}\n\t\t}\n}\n\noutputMsgs.push({payload:asset}); //push Assets to next node one at a time\n    }) //End Loop\n\n\nreturn [ outputMsgs ];\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 280,
+        "wires": [
+            [
+                "669b770c3101e278"
+            ]
+        ]
+    },
+    {
+        "id": "58c46778b6da0b0e",
+        "type": "debug",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1010,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "cf1cf6ea8cdd547d",
+        "type": "subflow:206496a20cb8cbbd",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "x": 360,
+        "y": 280,
+        "wires": [
+            [
+                "1d3626589559453d"
+            ]
+        ]
+    },
+    {
+        "id": "96151bcfe0fc47aa",
+        "type": "inject",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 440,
+        "wires": [
+            [
+                "753807fcc66731e5"
+            ]
+        ]
+    },
+    {
+        "id": "1cc68abbf2c0569c",
+        "type": "inject",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "10",
+        "topic": "",
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "aa45d743bb90f4ab"
+            ]
+        ]
+    },
+    {
+        "id": "aa45d743bb90f4ab",
+        "type": "credentials",
+        "z": "01518f98870b2ad5",
+        "name": "farmOS Credentials",
+        "props": [
+            {
+                "value": "payload.url",
+                "type": "msg"
+            },
+            {
+                "value": "payload.username",
+                "type": "msg"
+            },
+            {
+                "value": "payload.password",
+                "type": "msg"
+            },
+            {
+                "value": "payload.client_id",
+                "type": "msg"
+            },
+            {
+                "value": "client_secret",
+                "type": "msg"
+            },
+            {
+                "value": "payload.scope",
+                "type": "msg"
+            }
+        ],
+        "credentials": {},
+        "x": 350,
+        "y": 120,
+        "wires": [
+            [
+                "633c73c16fa2f948"
+            ]
+        ]
+    },
+    {
+        "id": "5d00eb4c6d0344a3",
+        "type": "debug",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 510,
+        "y": 440,
+        "wires": []
+    },
+    {
+        "id": "753807fcc66731e5",
+        "type": "sf:949541c9b70110d5",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "API": "asset/animal",
+        "Method": "GET",
+        "x": 330,
+        "y": 440,
+        "wires": [
+            [
+                "5d00eb4c6d0344a3"
+            ]
+        ]
+    },
+    {
+        "id": "633c73c16fa2f948",
+        "type": "sf:895a366cbeeeb85e",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "x": 560,
+        "y": 120,
+        "wires": [
+            [
+                "ac596d264a467b63"
+            ]
+        ]
+    },
+    {
+        "id": "ac596d264a467b63",
+        "type": "debug",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 750,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "4f3a447ade862043",
+        "type": "comment",
+        "z": "01518f98870b2ad5",
+        "name": "oauth2 example",
+        "info": "",
+        "x": 180,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "fd0aeb21e838310f",
+        "type": "comment",
+        "z": "01518f98870b2ad5",
+        "name": "CSV Upload example",
+        "info": "",
+        "x": 200,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "d1bdb8fba4d14229",
+        "type": "comment",
+        "z": "01518f98870b2ad5",
+        "name": "Get Example",
+        "info": "",
+        "x": 170,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "669b770c3101e278",
+        "type": "sf:949541c9b70110d5",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "API": "",
+        "Method": "",
+        "x": 830,
+        "y": 280,
+        "wires": [
+            [
+                "58c46778b6da0b0e"
+            ]
+        ]
+    }
+]
