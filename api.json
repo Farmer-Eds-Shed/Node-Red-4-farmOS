@@ -1,0 +1,270 @@
+    {
+        "id": "949541c9b70110d5",
+        "type": "subflow",
+        "name": "farmOS API",
+        "info": "",
+        "category": "farmOS",
+        "in": [
+            {
+                "x": 40,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "f5f2c948e607d3bb"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 900,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "c49aabb103815f36",
+                        "port": 0
+                    },
+                    {
+                        "id": "773b16e9273cd1ac",
+                        "port": 1
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "API",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "icon": "font-awesome/fa-leaf",
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Method",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "icon": "font-awesome/fa-globe",
+                    "type": "select",
+                    "opts": {
+                        "opts": [
+                            {
+                                "l": {
+                                    "en-US": "GET"
+                                },
+                                "v": "GET"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "POST"
+                                },
+                                "v": "POST"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "PATCH"
+                                },
+                                "v": "PATCH"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "DELETE"
+                                },
+                                "v": "DELETE"
+                            }
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {
+            "module": "Node-Red-4-farmOS",
+            "version": "1.0.0",
+            "author": "farmer.eds.shed@gmail.com",
+            "desc": "Node for interacting with farmOS 2.x",
+            "keywords": "farmOS, API",
+            "license": "GPL-3.0"
+        },
+        "color": "#C7E9C0",
+        "icon": "font-awesome/fa-leaf",
+
+
+"flow": [
+
+    {
+        "id": "524b513df6c48f0b",
+        "type": "function",
+        "z": "949541c9b70110d5",
+        "name": "API",
+        "func": "var token = global.get('token');\nvar api = env.get('API');\nvar method = env.get('Method')\n\nmsg.headers = {};\nmsg.headers['Authorization'] = \"Bearer \"+token;\nmsg.headers['Accept'] = \"application/vnd.api+json\";\nmsg.headers['content-type'] = 'application/vnd.api+json';\n\nmsg.url = global.get('farmOSurl').concat('/api/' + api);\n//msg.url = \"http://192.168.1.34/api/taxonomy_term/animal_type?page%5Boffset%5D=50&page%5Blimit%5D=50\";\nmsg.method = method;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 160,
+        "wires": [
+            [
+                "03cfe11edd83927d"
+            ]
+        ]
+    },
+    {
+        "id": "03cfe11edd83927d",
+        "type": "http request",
+        "z": "949541c9b70110d5",
+        "name": "",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 490,
+        "y": 160,
+        "wires": [
+            [
+                "773b16e9273cd1ac"
+            ]
+        ]
+    },
+    {
+        "id": "c49aabb103815f36",
+        "type": "function",
+        "z": "949541c9b70110d5",
+        "name": "Check for next",
+        "func": "var token = global.get('token');\nmsg.headers = {\n    Authorization: \"Bearer \"+token\n}\n\n\nif (msg.payload.links.hasOwnProperty(\"next\")){\n    msg.url = msg.payload.links.next.href;\n    msg.method = \"GET\";\n}else{\n    msg.url = null;\n    msg.complete = \"complete\";\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 700,
+        "y": 100,
+        "wires": [
+            [
+                "4a41f840f045b6fc"
+            ]
+        ]
+    },
+    {
+        "id": "4a41f840f045b6fc",
+        "type": "switch",
+        "z": "949541c9b70110d5",
+        "name": "",
+        "property": "url",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 490,
+        "y": 100,
+        "wires": [
+            [
+                "03cfe11edd83927d"
+            ]
+        ]
+    },
+    {
+        "id": "773b16e9273cd1ac",
+        "type": "switch",
+        "z": "949541c9b70110d5",
+        "name": "",
+        "property": "method",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "GET",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 650,
+        "y": 160,
+        "wires": [
+            [
+                "c49aabb103815f36"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "0698c93190ab9fc4",
+        "type": "delay",
+        "z": "949541c9b70110d5",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 170,
+        "y": 100,
+        "wires": [
+            [
+                "524b513df6c48f0b"
+            ]
+        ]
+    },
+    {
+        "id": "f5f2c948e607d3bb",
+        "type": "switch",
+        "z": "949541c9b70110d5",
+        "name": "",
+        "property": "Method",
+        "propertyType": "env",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "GET",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 2,
+        "x": 150,
+        "y": 160,
+        "wires": [
+            [
+                "0698c93190ab9fc4"
+            ],
+            [
+                "524b513df6c48f0b"
+            ]
+        ]
+    }
+]
+}

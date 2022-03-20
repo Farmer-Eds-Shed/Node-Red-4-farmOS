@@ -1,0 +1,28 @@
+{
+  "name": "@farmer-ed/node-red-4-farmos",
+  "version": "1.0.0",
+  "description": "Merges incoming messages into a new message whose payload is an array of the received messages",
+  "keywords": [
+    "node-red",
+    "farmos",
+    "oauth2",
+    "API"
+  ],
+  "node-red": {
+	"nodes": {
+		"farmos-oauth2-node": "oauth2.js",
+		"farmos-api-node": "api.js"
+        },
+    "dependencies": [
+		"node-red-contrib-oauth2"
+        ]
+    },
+    "dependencies": {
+		"node-red-contrib-oauth2": "3.0.3"
+    },
+  "author": {
+	"name": "farmer-eds-shed.com",
+	"email": "farmer.eds.shed@gmail.com"
+	}
+  "license": "GPL-3.0"
+}
