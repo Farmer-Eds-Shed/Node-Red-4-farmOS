@@ -18,7 +18,7 @@
         ],
         "out": [
             {
-                "x": 520,
+                "x": 560,
                 "y": 80,
                 "wires": [
                     {
@@ -100,7 +100,7 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 170,
-        "y": 280,
+        "y": 540,
         "wires": [
             [
                 "cf1cf6ea8cdd547d"
@@ -111,15 +111,15 @@
         "id": "1d3626589559453d",
         "type": "function",
         "z": "01518f98870b2ad5",
-        "name": "farmOS API Json from CSV",
-        "func": "//Declare Variables\nlet outputMsgs = [];\nvar breed,code;\nvar asset\n\n//Start loop to Read CSV one line at a time\nmsg.payload.forEach(data => {\n\n//extract data from CSV\nbreed = data.Breed;\ncode = data.Code\n\n\n\n\n//Create Asset Object \nasset = {\"data\":\n\t\t{\n\t\t\t\"type\": \"taxonomy_term--animal_type\",\n\t\t\t\"attributes\": {\n\t\t\t\t\"status\": true,\n\t\t\t\t\"name\": code,\n\t\t\t\t\"description\": {\n\t\t\t\t\t\"value\": breed,\n\t\t\t\t\t\"format\": \"default\",\n\t\t\t\t}\n\t\t\t}\n\t\t}\n}\n\noutputMsgs.push({payload:asset}); //push Assets to next node one at a time\n    }) //End Loop\n\n\nreturn [ outputMsgs ];\n\n",
+        "name": "farmOS Import X Breed Terms CSV",
+        "func": "//Declare Variables\nlet outputMsgs = [];\nvar breed,code;\nvar asset\n\n//Start loop to Read CSV one line at a time\nmsg.payload.forEach(data => {\n\n//extract data from CSV\nbreed = data.Breed;\ncode = data.Code;\n\n\n\n\n//Create Asset Object \nasset = {\"data\":\n\t\t{\n\t\t\t\"type\": \"taxonomy_term--animal_type\",\n\t\t\t\"attributes\": {\n\t\t\t\t\"status\": true,\n\t\t\t\t\"name\": code + \"X\",\n\t\t\t\t\"description\": {\n\t\t\t\t\t\"value\": breed + \" Cross\",\n\t\t\t\t\t\"format\": \"default\"\n\t\t\t\t}\n\t\t\t}\n\t\t}\n}\n\noutputMsgs.push({payload:asset}); //push Assets to next node one at a time\n    }) //End Loop\n\n\nreturn [ outputMsgs ];\n\n",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
         "x": 600,
-        "y": 280,
+        "y": 540,
         "wires": [
             [
                 "669b770c3101e278"
@@ -139,8 +139,8 @@
         "targetType": "msg",
         "statusVal": "payload",
         "statusType": "auto",
-        "x": 1010,
-        "y": 280,
+        "x": 1030,
+        "y": 540,
         "wires": []
     },
     {
@@ -148,8 +148,8 @@
         "type": "subflow:206496a20cb8cbbd",
         "z": "01518f98870b2ad5",
         "name": "",
-        "x": 360,
-        "y": 280,
+        "x": 340,
+        "y": 540,
         "wires": [
             [
                 "1d3626589559453d"
@@ -168,10 +168,10 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 170,
-        "y": 440,
+        "y": 320,
         "wires": [
             [
-                "753807fcc66731e5"
+                "7b059f30417e29b4"
             ]
         ]
     },
@@ -195,74 +195,17 @@
         ]
     },
     {
-        "id": "aa45d743bb90f4ab",
-        "type": "credentials",
-        "z": "01518f98870b2ad5",
-        "name": "farmOS Credentials",
-        "props": [
-            {
-                "value": "payload.url",
-                "type": "msg"
-            },
-            {
-                "value": "payload.username",
-                "type": "msg"
-            },
-            {
-                "value": "payload.password",
-                "type": "msg"
-            },
-            {
-                "value": "payload.client_id",
-                "type": "msg"
-            },
-            {
-                "value": "client_secret",
-                "type": "msg"
-            },
-            {
-                "value": "payload.scope",
-                "type": "msg"
-            }
-        ],
-        "credentials": {},
-        "x": 350,
-        "y": 120,
-        "wires": [
-            [
-                "633c73c16fa2f948"
-            ]
-        ]
-    },
-    {
-        "id": "5d00eb4c6d0344a3",
-        "type": "debug",
-        "z": "01518f98870b2ad5",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": true,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "payload",
-        "statusType": "auto",
-        "x": 510,
-        "y": 440,
-        "wires": []
-    },
-    {
         "id": "753807fcc66731e5",
         "type": "sf:949541c9b70110d5",
         "z": "01518f98870b2ad5",
         "name": "",
-        "API": "asset/animal",
+        "API": "taxonomy_term/animal_type",
         "Method": "GET",
-        "x": 330,
-        "y": 440,
+        "x": 510,
+        "y": 320,
         "wires": [
             [
-                "5d00eb4c6d0344a3"
+                "b3d2697f4efe2d5f"
             ]
         ]
     },
@@ -300,7 +243,7 @@
         "id": "4f3a447ade862043",
         "type": "comment",
         "z": "01518f98870b2ad5",
-        "name": "oauth2 example",
+        "name": "Oauth2 example",
         "info": "",
         "x": 180,
         "y": 60,
@@ -310,20 +253,20 @@
         "id": "fd0aeb21e838310f",
         "type": "comment",
         "z": "01518f98870b2ad5",
-        "name": "CSV Upload example",
+        "name": "POST examples",
         "info": "",
-        "x": 200,
-        "y": 220,
+        "x": 180,
+        "y": 480,
         "wires": []
     },
     {
         "id": "d1bdb8fba4d14229",
         "type": "comment",
         "z": "01518f98870b2ad5",
-        "name": "Get Example",
+        "name": "Get Examples",
         "info": "",
         "x": 170,
-        "y": 380,
+        "y": 200,
         "wires": []
     },
     {
@@ -331,14 +274,467 @@
         "type": "sf:949541c9b70110d5",
         "z": "01518f98870b2ad5",
         "name": "",
-        "API": "",
-        "Method": "",
-        "x": 830,
-        "y": 280,
+        "API": "taxonomy_term/animal_type",
+        "Method": "POST",
+        "x": 850,
+        "y": 540,
         "wires": [
             [
                 "58c46778b6da0b0e"
             ]
         ]
+    },
+    {
+        "id": "aa45d743bb90f4ab",
+        "type": "credentials",
+        "z": "01518f98870b2ad5",
+        "name": "farmOS Credentials",
+        "props": [
+            {
+                "value": "payload.url",
+                "type": "msg"
+            },
+            {
+                "value": "payload.username",
+                "type": "msg"
+            },
+            {
+                "value": "payload.password",
+                "type": "msg"
+            },
+            {
+                "value": "payload.client_id",
+                "type": "msg"
+            },
+            {
+                "value": "client_secret",
+                "type": "msg"
+            },
+            {
+                "value": "payload.scope",
+                "type": "msg"
+            }
+        ],
+        "x": 350,
+        "y": 120,
+        "wires": [
+            [
+                "633c73c16fa2f948"
+            ]
+        ]
+    },
+    {
+        "id": "73d851cd5588472b",
+        "type": "function",
+        "z": "01518f98870b2ad5",
+        "name": "farmOS Import Animal Assets CSV",
+        "func": "//Declare Variables\nlet outputMsgs = [];\nvar array = flow.get('breeds')\nvar tag,gender,dob,breed;\nvar asset,UUID;\n\n//Start loop to Read CSV one line at a time\nmsg.payload.forEach(data => {\n\n//extract data from CSV\ntag = data[\"Tag Number\"];\ngender = data.Gender\ndob = data[\"Date of Birth\"]\nbreed = data.Breed;\n//breedid= flow.get(breed)\n\n//loop to find breed UUID\narray.forEach(data2 => {\n    if (data2.breed == breed) {\n        UUID = data2.id;\n        }   \n    })\n// End loop to find breed UUID\n\n\n//Start Date formatting\nfunction padZero(i) {\n    return i < 10 ? \"0\"+i : i;\n}\nconst dateString = dob;\nconst parts = dateString.split(\"/\");\nconst date = new Date(Number(parts[2]), Number(parts[1]) - 1, Number(parts[0]));\nconst newDateString = date.getFullYear()+'-' + (padZero(date.getMonth()+1)) + '-'+padZero(date.getDate());\n//End Date formatting\n\n//Create Asset Object \nasset = {\n  \"data\": {\n    \"type\": \"asset--animal\",\n    \"attributes\": {\n      \"name\": tag.slice(-3), //name is last 3 digits of tag number \n      \"id_tag\": [ \n\t\t{\n\t\t\"id\": tag,\n\t\t\"type\": \"ear_tag\",\n\t\t\"location\": \"\"\n\t\t}\n\t],\n        \"birthdate\": newDateString + \"T00:00:00+00:00\", //Formatted Date @ midnight\n        \"sex\": gender.charAt(0), //reduce Male/Female to M/F\n        \n        \n    },\n   \"relationships\": {\n\t\t\"animal_type\": {\n\t\t\t\"data\": {\n\t\t\t    \"type\": \"taxonomy_term--animal_type\",\n\t\t\t\t\"id\": UUID,\n}\n  }\n}\n}\n      \n}\noutputMsgs.push({payload:asset}); //push Assets to next node one at a time\n    }) //End Loop Read CSV\n\n\nreturn [ outputMsgs ];",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 660,
+        "wires": [
+            [
+                "7e9f33294cbd3373"
+            ]
+        ]
+    },
+    {
+        "id": "eccacd4654f70868",
+        "type": "inject",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "props": [
+            {
+                "p": "filename",
+                "v": "/Node Red/ICBF Export.csv",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 660,
+        "wires": [
+            [
+                "3709a5883bebad14"
+            ]
+        ]
+    },
+    {
+        "id": "3709a5883bebad14",
+        "type": "subflow:206496a20cb8cbbd",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "x": 340,
+        "y": 660,
+        "wires": [
+            [
+                "73d851cd5588472b"
+            ]
+        ]
+    },
+    {
+        "id": "665ba250148dbb11",
+        "type": "debug",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "7e9f33294cbd3373",
+        "type": "sf:949541c9b70110d5",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "API": "asset/animal",
+        "Method": "POST",
+        "x": 850,
+        "y": 660,
+        "wires": [
+            [
+                "665ba250148dbb11"
+            ]
+        ]
+    },
+    {
+        "id": "b3d2697f4efe2d5f",
+        "type": "function",
+        "z": "01518f98870b2ad5",
+        "name": "GET Animal Term ID's",
+        "func": "var array = flow.get('breeds') || [];\nvar breed;\nvar id;\n\nmsg.payload.data.forEach(data => {\nbreed = data.attributes.name;\nid = data.id;\narray.push({id:id,breed:breed});\n})\n\nflow.set(\"breeds\", array);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 720,
+        "y": 320,
+        "wires": [
+            [
+                "d1ca3b9a04ba568a"
+            ]
+        ]
+    },
+    {
+        "id": "d1ca3b9a04ba568a",
+        "type": "debug",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 930,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "f7be6a3510df7551",
+        "type": "inject",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 260,
+        "wires": [
+            [
+                "69ef18606737bae9"
+            ]
+        ]
+    },
+    {
+        "id": "69ef18606737bae9",
+        "type": "sf:949541c9b70110d5",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "API": "asset/animal",
+        "Method": "GET",
+        "x": 330,
+        "y": 260,
+        "wires": [
+            [
+                "f18dbdfa68fe209f"
+            ]
+        ]
+    },
+    {
+        "id": "f18dbdfa68fe209f",
+        "type": "debug",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 510,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "b0c9d17bf2c38295",
+        "type": "inject",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "props": [
+            {
+                "p": "filename",
+                "v": "/Node Red/DAFM-Breeds.csv",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 600,
+        "wires": [
+            [
+                "69e749f4e7bcc42f"
+            ]
+        ]
+    },
+    {
+        "id": "9ae182c8e8b5e9ee",
+        "type": "function",
+        "z": "01518f98870b2ad5",
+        "name": "farmOS Import Animal Terms CSV",
+        "func": "//Declare Variables\nlet outputMsgs = [];\nvar breed,code;\nvar asset\n\n//Start loop to Read CSV one line at a time\nmsg.payload.forEach(data => {\n\n//extract data from CSV\nbreed = data.Breed;\ncode = data.Code;\n\n\n\n\n//Create Asset Object \nasset = {\"data\":\n\t\t{\n\t\t\t\"type\": \"taxonomy_term--animal_type\",\n\t\t\t\"attributes\": {\n\t\t\t\t\"status\": true,\n\t\t\t\t\"name\": code,\n\t\t\t\t\"description\": {\n\t\t\t\t\t\"value\": breed,\n\t\t\t\t\t\"format\": \"default\"\n\t\t\t\t}\n\t\t\t}\n\t\t}\n}\n\noutputMsgs.push({payload:asset}); //push Assets to next node one at a time\n    }) //End Loop\n\n\nreturn [ outputMsgs ];\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 600,
+        "wires": [
+            [
+                "1daeb64e355781bc"
+            ]
+        ]
+    },
+    {
+        "id": "450def89e86a5ed0",
+        "type": "debug",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": true,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "69e749f4e7bcc42f",
+        "type": "subflow:206496a20cb8cbbd",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "x": 340,
+        "y": 600,
+        "wires": [
+            [
+                "9ae182c8e8b5e9ee"
+            ]
+        ]
+    },
+    {
+        "id": "1daeb64e355781bc",
+        "type": "sf:949541c9b70110d5",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "API": "taxonomy_term/animal_type",
+        "Method": "POST",
+        "x": 850,
+        "y": 600,
+        "wires": [
+            [
+                "450def89e86a5ed0"
+            ]
+        ]
+    },
+    {
+        "id": "b5f0fab209322c18",
+        "type": "function",
+        "z": "01518f98870b2ad5",
+        "name": "CSV Headings",
+        "func": "msg.payload = \"Tag Number,Gender,Date of Birth,Breed\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 340,
+        "y": 400,
+        "wires": [
+            [
+                "af52c3f7785bbd99"
+            ]
+        ]
+    },
+    {
+        "id": "af52c3f7785bbd99",
+        "type": "file",
+        "z": "01518f98870b2ad5",
+        "name": "Blank File with Headings",
+        "filename": "/Node Red/Herd Export.csv",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 570,
+        "y": 400,
+        "wires": [
+            [
+                "11faaec3fb80cce5"
+            ]
+        ]
+    },
+    {
+        "id": "f14d58aa9952ef30",
+        "type": "function",
+        "z": "01518f98870b2ad5",
+        "name": "Parse Asset",
+        "func": "var array = flow.get('breeds')\nlet outputMsgs = [];\nvar tag,dob,breed,gender,csv,code;\noutputMsgs.push({payload:csv});\nmsg.payload.data.forEach(data => {\n    if (data.attributes.archived == null) {\n    tag = data.attributes.id_tag[0].id;\n    gender = data.attributes.sex;\n    dob = data.attributes.birthdate;\n    //Start Date formatting\n    const date = new Date(dob);\n    const newDateString = date.getDate() + \"/\" + (date.getMonth()+1) + \"/\" + date.getFullYear();\n    //End Date formatting\n    breed = data.relationships.animal_type.data.id;\n    array.forEach(dat => {\n    if (dat.id == breed) {\n        code = dat.breed;\n        }\n    })\n    \n    csv = tag +\",\"+gender+ \",\" + newDateString + \",\" + code ;   \n        outputMsgs.push({payload:csv});\n    \n    }\n    })\n\nreturn [ outputMsgs ];",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 400,
+        "wires": [
+            [
+                "79f6c5a353cb3aef"
+            ]
+        ]
+    },
+    {
+        "id": "79f6c5a353cb3aef",
+        "type": "file",
+        "z": "01518f98870b2ad5",
+        "name": "Export CSV file",
+        "filename": "/Node Red/Herd Export.csv",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 1160,
+        "y": 400,
+        "wires": [
+            [
+                "d851e8a3f77105ee"
+            ]
+        ]
+    },
+    {
+        "id": "11faaec3fb80cce5",
+        "type": "sf:949541c9b70110d5",
+        "z": "01518f98870b2ad5",
+        "name": "GET Asset",
+        "API": "asset/animal",
+        "Method": "GET",
+        "x": 790,
+        "y": 400,
+        "wires": [
+            [
+                "f14d58aa9952ef30"
+            ]
+        ]
+    },
+    {
+        "id": "32788bf611c63b3c",
+        "type": "inject",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 400,
+        "wires": [
+            [
+                "b5f0fab209322c18"
+            ]
+        ]
+    },
+    {
+        "id": "7b059f30417e29b4",
+        "type": "change",
+        "z": "01518f98870b2ad5",
+        "name": "Clear array",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "breeds",
+                "pt": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 330,
+        "y": 320,
+        "wires": [
+            [
+                "753807fcc66731e5"
+            ]
+        ]
+    },
+    {
+        "id": "d851e8a3f77105ee",
+        "type": "debug",
+        "z": "01518f98870b2ad5",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1350,
+        "y": 400,
+        "wires": []
     }
 ]
