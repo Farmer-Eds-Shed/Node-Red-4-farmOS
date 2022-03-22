@@ -3,6 +3,8 @@
 Node Red Custom nodes for interacting with farmOS API. <br />
 Install by running **npm i @farmer-ed/node-red-4-farmos**  from **.Node Red** directory.
 
+https://youtube.com/playlist?list=PLV_VqXF2pXXJdFjVhzdzDKskzkeXqLd8f
+
 ## farmOS Oauth2:
 
 **Inputs:** <br />
