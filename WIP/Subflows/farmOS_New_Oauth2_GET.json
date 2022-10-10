@@ -1,0 +1,1756 @@
+[
+    {
+        "id": "1fd1c96cd5878a7a",
+        "type": "subflow",
+        "name": "Save Selection",
+        "info": "",
+        "category": "FarmerEdsHelpers",
+        "in": [
+            {
+                "x": 40,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "88c7c52f6f2cd381"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 480,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "558951e9d0bde715",
+                        "port": 0
+                    },
+                    {
+                        "id": "9448c57175bb477e",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "save",
+                "type": "str",
+                "value": "global",
+                "ui": {
+                    "icon": "font-awesome/fa-save",
+                    "label": {
+                        "en-US": "Save as"
+                    },
+                    "type": "select",
+                    "opts": {
+                        "opts": [
+                            {
+                                "l": {
+                                    "en-US": "Global Variable"
+                                },
+                                "v": "global"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "Flow Variable"
+                                },
+                                "v": "flow"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "selection",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "label": {
+                        "en-US": "Name"
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#FDF0C2",
+        "icon": "font-awesome/fa-save"
+    },
+    {
+        "id": "558951e9d0bde715",
+        "type": "function",
+        "z": "1fd1c96cd5878a7a",
+        "name": "Save flow",
+        "func": "flow.set(\"$parent.\"+ env.get('selection'),msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "88c7c52f6f2cd381",
+        "type": "switch",
+        "z": "1fd1c96cd5878a7a",
+        "name": "",
+        "property": "save",
+        "propertyType": "env",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "flow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "global",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 150,
+        "y": 100,
+        "wires": [
+            [
+                "558951e9d0bde715"
+            ],
+            [
+                "9448c57175bb477e"
+            ]
+        ]
+    },
+    {
+        "id": "9448c57175bb477e",
+        "type": "function",
+        "z": "1fd1c96cd5878a7a",
+        "name": "Save global",
+        "func": "global.set(env.get('selection'),msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3d22b1cdeadc9255",
+        "type": "subflow",
+        "name": "Load Selection",
+        "info": "",
+        "category": "FarmerEdsHelpers",
+        "in": [
+            {
+                "x": 100,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "f675330769fe1ae8"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 640,
+                "y": 200,
+                "wires": [
+                    {
+                        "id": "eff26094d50d7448",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "File",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Section",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "label": {
+                        "en-US": "Load Section"
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#FDF0C2",
+        "icon": "node-red/file-in.svg"
+    },
+    {
+        "id": "f675330769fe1ae8",
+        "type": "file in",
+        "z": "3d22b1cdeadc9255",
+        "name": "",
+        "filename": "${File}",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 230,
+        "y": 80,
+        "wires": [
+            [
+                "77cbd85cb7d9cd6d"
+            ]
+        ]
+    },
+    {
+        "id": "77cbd85cb7d9cd6d",
+        "type": "json",
+        "z": "3d22b1cdeadc9255",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 450,
+        "y": 80,
+        "wires": [
+            [
+                "a8f21ad486fd968e"
+            ]
+        ]
+    },
+    {
+        "id": "eff26094d50d7448",
+        "type": "change",
+        "z": "3d22b1cdeadc9255",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload",
+                "pt": "msg",
+                "to": "options",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 470,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a8f21ad486fd968e",
+        "type": "function",
+        "z": "3d22b1cdeadc9255",
+        "name": "Load Section",
+        "func": "msg.payload = msg.payload[env.get('Section')];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 470,
+        "y": 140,
+        "wires": [
+            [
+                "eff26094d50d7448"
+            ]
+        ]
+    },
+    {
+        "id": "658a10db51914bd5",
+        "type": "subflow",
+        "name": "farmOS GET",
+        "info": "",
+        "category": "farmOS",
+        "in": [
+            {
+                "x": 60,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "095b676e3b19157d"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1320,
+                "y": 180,
+                "wires": [
+                    {
+                        "id": "cc97b07158070174",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "Source",
+                "type": "str",
+                "value": "path",
+                "ui": {
+                    "label": {
+                        "en-US": "API Source"
+                    },
+                    "type": "select",
+                    "opts": {
+                        "opts": [
+                            {
+                                "l": {
+                                    "en-US": "Load from Global Variable"
+                                },
+                                "v": "global"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "Load from Flow Variable"
+                                },
+                                "v": "flow"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "Enter below"
+                                },
+                                "v": "path"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "msg.payload"
+                                },
+                                "v": "msgpay"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "API",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "filter_source",
+                "type": "str",
+                "value": "none",
+                "ui": {
+                    "label": {
+                        "en-US": "Filter Source"
+                    },
+                    "type": "select",
+                    "opts": {
+                        "opts": [
+                            {
+                                "l": {
+                                    "en-US": "Load from Global Variable"
+                                },
+                                "v": "global"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "Load from Flow Variable"
+                                },
+                                "v": "flow"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "Enter below"
+                                },
+                                "v": "enter"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "N/A"
+                                },
+                                "v": "none"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "Filter",
+                "type": "str",
+                "value": "",
+                "ui": {
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {},
+        "color": "#C7E9C0",
+        "icon": "font-awesome/fa-leaf"
+    },
+    {
+        "id": "1550a58d2482b6bd",
+        "type": "function",
+        "z": "658a10db51914bd5",
+        "name": "path",
+        "func": "var token = global.get('token');\nvar api = env.get('API');\nvar filter_source = env.get('filter_source');\nconst filter = msg.payload;\n\nmsg.headers = {};\nmsg.headers['Authorization'] = \"Bearer \"+token;\nmsg.headers['Accept'] = \"application/vnd.api+json\";\nmsg.headers['content-type'] = 'application/vnd.api+json';\n\nif (filter != null && filter.includes(\"filter\")) {\nmsg.url = global.get('farmOSurl').concat('/api/' + api  + '?' + filter);\n}\nelse {\nmsg.url = global.get('farmOSurl').concat('/api/' + api);   \n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 120,
+        "wires": [
+            [
+                "90e52141bcc6f160"
+            ]
+        ]
+    },
+    {
+        "id": "90e52141bcc6f160",
+        "type": "http request",
+        "z": "658a10db51914bd5",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 970,
+        "y": 180,
+        "wires": [
+            [
+                "cc97b07158070174"
+            ]
+        ]
+    },
+    {
+        "id": "cc97b07158070174",
+        "type": "function",
+        "z": "658a10db51914bd5",
+        "name": "Check for next",
+        "func": "var token = global.get('token');\nmsg.headers = {\n    Authorization: \"Bearer \"+token\n}\n\n\nif (msg.payload.links != null && msg.payload.links.hasOwnProperty(\"next\")){\n    msg.url = msg.payload.links.next.href;\n\n}else{\n    msg.url = null;\n    msg.complete = \"complete\";\n}\n\nif (msg.payload.links != null){\nconst endpoints = msg.payload.links;\nconst keys = Object.keys(endpoints);\nmsg.options = keys;\n}\n\nif (msg.statusCode == \"404\"){\n    msg.payload = \"Not Found, Check url / enpoints are valid\"\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1160,
+        "y": 180,
+        "wires": [
+            [
+                "8a1fbce15d8543e7"
+            ]
+        ]
+    },
+    {
+        "id": "8a1fbce15d8543e7",
+        "type": "switch",
+        "z": "658a10db51914bd5",
+        "name": "",
+        "property": "url",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 1050,
+        "y": 120,
+        "wires": [
+            [
+                "90e52141bcc6f160"
+            ]
+        ]
+    },
+    {
+        "id": "c4f8e1dacfa44eb0",
+        "type": "switch",
+        "z": "658a10db51914bd5",
+        "name": "Select endpoint",
+        "property": "Source",
+        "propertyType": "env",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "path",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "global",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "flow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "msgpay",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 600,
+        "y": 180,
+        "wires": [
+            [
+                "1550a58d2482b6bd"
+            ],
+            [
+                "5be12353ef57d117"
+            ],
+            [
+                "9a741adec7b8f7eb"
+            ],
+            [
+                "f17a601a2f31f869"
+            ]
+        ]
+    },
+    {
+        "id": "5be12353ef57d117",
+        "type": "function",
+        "z": "658a10db51914bd5",
+        "name": "global",
+        "func": "var token = global.get('token');\nvar global_api = global.get(env.get('API'));\nvar parts = global_api.split(\"--\");\nvar api = parts[0] + \"/\" + parts[1];\nconst filter = flow.get('filter');\n\n\n\nmsg.headers = {};\nmsg.headers['Authorization'] = \"Bearer \"+token;\nmsg.headers['Accept'] = \"application/vnd.api+json\";\nmsg.headers['content-type'] = 'application/vnd.api+json';\n\nif (filter != null && filter.includes(\"filter\")) {\nmsg.url = global.get('farmOSurl').concat('/api/' + api  + '?' + filter);\n}\nelse {\nmsg.url = global.get('farmOSurl').concat('/api/' + api);   \n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 160,
+        "wires": [
+            [
+                "90e52141bcc6f160"
+            ]
+        ]
+    },
+    {
+        "id": "9a741adec7b8f7eb",
+        "type": "function",
+        "z": "658a10db51914bd5",
+        "name": "flow",
+        "func": "var token = global.get('token');\nvar flow_api = flow.get(\"$parent.\"+ env.get('API'));\nvar parts = flow_api.split(\"--\");\nvar api = parts[0] + \"/\" + parts[1];\nconst filter = flow.get('filter');\n\n\n\nmsg.headers = {};\nmsg.headers['Authorization'] = \"Bearer \"+token;\nmsg.headers['Accept'] = \"application/vnd.api+json\";\nmsg.headers['content-type'] = 'application/vnd.api+json';\n\nif (filter != null && filter.includes(\"filter\")) {\nmsg.url = global.get('farmOSurl').concat('/api/' + api  + '?' + filter);\n}\nelse {\nmsg.url = global.get('farmOSurl').concat('/api/' + api);   \n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 200,
+        "wires": [
+            [
+                "90e52141bcc6f160"
+            ]
+        ]
+    },
+    {
+        "id": "f17a601a2f31f869",
+        "type": "function",
+        "z": "658a10db51914bd5",
+        "name": "msg",
+        "func": "var token = global.get('token');\nvar api = msg.payload\n\nmsg.headers = {};\nmsg.headers['Authorization'] = \"Bearer \"+token;\nmsg.headers['Accept'] = \"application/vnd.api+json\";\nmsg.headers['content-type'] = 'application/vnd.api+json';\n\nmsg.url = global.get('farmOSurl').concat('/api/' + api);   \n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 240,
+        "wires": [
+            [
+                "90e52141bcc6f160"
+            ]
+        ]
+    },
+    {
+        "id": "095b676e3b19157d",
+        "type": "switch",
+        "z": "658a10db51914bd5",
+        "name": "select filter",
+        "property": "filter_source",
+        "propertyType": "env",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "enter",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "global",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "flow",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "none",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 190,
+        "y": 160,
+        "wires": [
+            [
+                "317df1e545ba6d50"
+            ],
+            [
+                "f34a0b7dd669b134"
+            ],
+            [
+                "91b015b1ee7dc6d7"
+            ],
+            [
+                "c4f8e1dacfa44eb0"
+            ]
+        ]
+    },
+    {
+        "id": "317df1e545ba6d50",
+        "type": "function",
+        "z": "658a10db51914bd5",
+        "name": "enter",
+        "func": "filter = env.get('Filter');\nflow.set('filter',filter);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 60,
+        "wires": [
+            [
+                "c4f8e1dacfa44eb0"
+            ]
+        ]
+    },
+    {
+        "id": "f34a0b7dd669b134",
+        "type": "function",
+        "z": "658a10db51914bd5",
+        "name": "global",
+        "func": "filter = global.get(env.get('Filter'));\nflow.set('filter',filter);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 100,
+        "wires": [
+            [
+                "c4f8e1dacfa44eb0"
+            ]
+        ]
+    },
+    {
+        "id": "91b015b1ee7dc6d7",
+        "type": "function",
+        "z": "658a10db51914bd5",
+        "name": "flow",
+        "func": "filter = flow.get(\"$parent.\"+env.get('Filter'));\nflow.set('filter',filter);\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 140,
+        "wires": [
+            [
+                "c4f8e1dacfa44eb0"
+            ]
+        ]
+    },
+    {
+        "id": "7dc49beefc960324",
+        "type": "subflow",
+        "name": "farmOS Oauth2V2",
+        "info": "",
+        "category": "farmOS",
+        "in": [
+            {
+                "x": 60,
+                "y": 260,
+                "wires": [
+                    {
+                        "id": "245a48e8730cdf4b"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 970,
+                "y": 260,
+                "wires": [
+                    {
+                        "id": "0e766f373744777e",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 950,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "28c0771b4b0833b9",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "grant",
+                "type": "str",
+                "value": "client",
+                "ui": {
+                    "icon": "font-awesome/fa-id-card-o",
+                    "label": {
+                        "en-US": "Grant Type"
+                    },
+                    "type": "select",
+                    "opts": {
+                        "opts": [
+                            {
+                                "l": {
+                                    "en-US": "authorization code"
+                                },
+                                "v": "code"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "client credentials"
+                                },
+                                "v": "client"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "password"
+                                },
+                                "v": "password"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "scope",
+                "type": "str",
+                "value": "farm_worker",
+                "ui": {
+                    "type": "select",
+                    "opts": {
+                        "opts": [
+                            {
+                                "l": {
+                                    "en-US": "Manager"
+                                },
+                                "v": "farm_manager"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "Viewer"
+                                },
+                                "v": "farm_viewer"
+                            },
+                            {
+                                "l": {
+                                    "en-US": "Worker"
+                                },
+                                "v": "farm_worker"
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "url",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "redirect",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "client",
+                "type": "cred"
+            },
+            {
+                "name": "secret",
+                "type": "cred"
+            },
+            {
+                "name": "username",
+                "type": "cred"
+            },
+            {
+                "name": "password",
+                "type": "cred"
+            }
+        ],
+        "meta": {},
+        "color": "#C7E9C0",
+        "outputLabels": [
+            "Debug",
+            "Autherization Code URL"
+        ],
+        "icon": "node-red-contrib-oauth2/oauth2.svg"
+    },
+    {
+        "id": "3457d8031de8cd42",
+        "type": "function",
+        "z": "7dc49beefc960324",
+        "name": "authorization_code",
+        "func": "var farmOSurl = env.get('url');\nglobal.set('farmOSurl', farmOSurl);\n\nvar client = env.get('client');\nvar redirect = env.get('redirect');\nvar secret = env.get('secret');\nvar scope = env.get('scope');\n\nmsg.payload ={\n        \"grant_type\": \"authorization_code\",\n            \"client_id\": client,\n            \"code\": msg.payload.code,\n            \"state\": msg.payload.state,\n            \"redirect_uri\": redirect,\n            \"client_secret\": secret,\n            \"scope\": scope\n        }\n\nmsg.headers = {};\nmsg.headers['Accept'] = \"application/json\";\nmsg.headers['content-type'] = 'application/x-www-form-urlencoded';\n\nmsg.method = \"POST\";\nmsg.url = env.get('url') + \"/oauth/token\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 180,
+        "wires": [
+            [
+                "40a71fd2da425e1a"
+            ]
+        ]
+    },
+    {
+        "id": "40a71fd2da425e1a",
+        "type": "http request",
+        "z": "7dc49beefc960324",
+        "name": "",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "fad14de366c84480",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "senderr": false,
+        "x": 650,
+        "y": 260,
+        "wires": [
+            [
+                "0e766f373744777e"
+            ]
+        ]
+    },
+    {
+        "id": "4fad059381b91f7d",
+        "type": "function",
+        "z": "7dc49beefc960324",
+        "name": "client_credentials",
+        "func": "var farmOSurl = env.get('url');\nglobal.set('farmOSurl', farmOSurl);\n\nvar client = env.get('client');\nvar secret = env.get('secret');\nvar scope = env.get('scope');\n\nmsg.payload = {\n    \"grant_type\": \"client_credentials\",\n                \"client_id\": client,\n                \"client_secret\": secret,\n                \"scope\": scope\n}\n\nmsg.headers = {};\nmsg.headers['Accept'] = \"application/json\";\nmsg.headers['content-type'] = 'application/x-www-form-urlencoded';\n\nmsg.method = \"POST\";\nmsg.url = env.get('url') + \"/oauth/token\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 260,
+        "wires": [
+            [
+                "40a71fd2da425e1a"
+            ]
+        ]
+    },
+    {
+        "id": "245a48e8730cdf4b",
+        "type": "switch",
+        "z": "7dc49beefc960324",
+        "name": "",
+        "property": "grant",
+        "propertyType": "env",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "code",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "client",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "password",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": true,
+        "outputs": 3,
+        "x": 190,
+        "y": 260,
+        "wires": [
+            [
+                "187dc2e2714c9c4a"
+            ],
+            [
+                "4fad059381b91f7d"
+            ],
+            [
+                "333c7100ca0411e3"
+            ]
+        ]
+    },
+    {
+        "id": "333c7100ca0411e3",
+        "type": "function",
+        "z": "7dc49beefc960324",
+        "name": "password",
+        "func": "var farmOSurl = env.get('url');\nglobal.set('farmOSurl', farmOSurl);\n\nvar client = env.get('client');\nvar secret = env.get('secret');\nvar scope = env.get('scope');\nvar username = env.get('username');\nvar password = env.get('password');\n\nmsg.payload = {\n    \"grant_type\": \"password\",\n    \"username\": username,\n    \"password\": password,\n    \"client_id\": client,\n    \"client_secret\": secret,\n    \"scope\": scope\n}\n\nmsg.headers = {};\nmsg.headers['Accept'] = \"application/json\";\nmsg.headers['content-type'] = 'application/x-www-form-urlencoded';\n\nmsg.method = \"POST\";\nmsg.url = env.get('url') + \"/oauth/token\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 320,
+        "wires": [
+            [
+                "40a71fd2da425e1a"
+            ]
+        ]
+    },
+    {
+        "id": "28c0771b4b0833b9",
+        "type": "function",
+        "z": "7dc49beefc960324",
+        "name": "Generate  URL",
+        "func": "msg.payload = env.get(\"url\") + \"/oauth/authorize?response_type=code&client_id=\" + env.get(\"client\") + \"&scope=\" + env.get(\"scope\") + \"&redirect_uri=\" + env.get(\"redirect\") + \"&state=p4W8P5f7gJCIDbC1Mv78zHhlpJOidy\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "187dc2e2714c9c4a",
+        "type": "switch",
+        "z": "7dc49beefc960324",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "url",
+                "vt": "str"
+            },
+            {
+                "t": "hask",
+                "v": "code",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 190,
+        "y": 140,
+        "wires": [
+            [
+                "28c0771b4b0833b9"
+            ],
+            [
+                "3457d8031de8cd42"
+            ]
+        ]
+    },
+    {
+        "id": "0e766f373744777e",
+        "type": "function",
+        "z": "7dc49beefc960324",
+        "name": "",
+        "func": "var time;\nif (msg.payload.access_token) {\n    var token = msg.payload.access_token;\n    var refresh = msg.payload.refresh_token;\n    global.set('token', token);\n    flow.set('refresh', refresh);\n    time = new Date();\n    msg.bearer = msg.payload;\n    msg.payload = \"Access Granted \" + time;\n} else {\n    msg.error = msg.payload;\n    msg.payload = msg.error.error;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fad14de366c84480",
+        "type": "tls-config",
+        "z": "7dc49beefc960324",
+        "name": "",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "",
+        "servername": "",
+        "verifyservercert": false,
+        "alpnprotocol": ""
+    },
+    {
+        "id": "4b62152e9ef759d7",
+        "type": "subflow",
+        "name": "farmOS Callback",
+        "info": "",
+        "category": "farmOS",
+        "in": [],
+        "out": [
+            {
+                "x": 480,
+                "y": 160,
+                "wires": [
+                    {
+                        "id": "303133fd2c8b50b5",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "Dashboard",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Endpoint",
+                "type": "str",
+                "value": "farmos/callback"
+            }
+        ],
+        "meta": {},
+        "color": "#C7E9C0",
+        "icon": "font-awesome/fa-leaf"
+    },
+    {
+        "id": "303133fd2c8b50b5",
+        "type": "http in",
+        "z": "4b62152e9ef759d7",
+        "name": "",
+        "url": "${Endpoint}",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 220,
+        "y": 160,
+        "wires": [
+            [
+                "41724c1d66062439"
+            ]
+        ]
+    },
+    {
+        "id": "828548d9de9135e1",
+        "type": "http response",
+        "z": "4b62152e9ef759d7",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 830,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "b217e6212ebc352c",
+        "type": "template",
+        "z": "4b62152e9ef759d7",
+        "name": "page",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<html>\n    <head>\n        <style>\n.button {\n  border: none;\n  color: white;\n  padding: 15px 32px;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n  font-size: 16px;\n  margin: 4px 2px;\n  cursor: pointer;\n}\n\n.button2 {background-color: #008CBA;} /* Blue */\n</style>\n    </head>\n    <body>\n        <h1>farmOS Access Granted</h1>\n       <a href=\"{{payload}}\" target=\"_parent\"><button class=\"button button2\">Continue</button></a>\n    </body>\n</html>",
+        "x": 650,
+        "y": 260,
+        "wires": [
+            [
+                "828548d9de9135e1"
+            ]
+        ]
+    },
+    {
+        "id": "41724c1d66062439",
+        "type": "switch",
+        "z": "4b62152e9ef759d7",
+        "name": "",
+        "property": "payload.code",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 310,
+        "y": 280,
+        "wires": [
+            [
+                "19690e2c86c027b1"
+            ],
+            [
+                "1409ca6ba4c79d8f"
+            ]
+        ]
+    },
+    {
+        "id": "8c2fb72c65eab79c",
+        "type": "template",
+        "z": "4b62152e9ef759d7",
+        "name": "page",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<html>\n    <head>\n        <style>\n.button {\n  border: none;\n  color: white;\n  padding: 15px 32px;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n  font-size: 16px;\n  margin: 4px 2px;\n  cursor: pointer;\n}\n\n.button2 {background-color: #008CBA;} /* Blue */\n</style>\n    </head>\n    <body>\n        <h1>farmOS Authorization Error</h1>\n        <a href=\"{{payload}}\" target=\"_parent\"><button class=\"button button2\">Return</button></a>\n    </body>\n</html>",
+        "x": 650,
+        "y": 300,
+        "wires": [
+            [
+                "828548d9de9135e1"
+            ]
+        ]
+    },
+    {
+        "id": "1409ca6ba4c79d8f",
+        "type": "change",
+        "z": "4b62152e9ef759d7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Dashboard",
+                "tot": "env"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 480,
+        "y": 300,
+        "wires": [
+            [
+                "8c2fb72c65eab79c"
+            ]
+        ]
+    },
+    {
+        "id": "19690e2c86c027b1",
+        "type": "change",
+        "z": "4b62152e9ef759d7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "Dashboard",
+                "tot": "env"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 480,
+        "y": 260,
+        "wires": [
+            [
+                "b217e6212ebc352c"
+            ]
+        ]
+    },
+    {
+        "id": "a288bc4cb4e3037b",
+        "type": "tab",
+        "label": "FarmOS Oath2 Test",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "da8940e6cffdb093",
+        "type": "subflow:4b62152e9ef759d7",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "env": [
+            {
+                "name": "Dashboard",
+                "value": "https://192.168.1.22.nip.io:1880/ui/#!/3",
+                "type": "str"
+            }
+        ],
+        "x": 180,
+        "y": 120,
+        "wires": [
+            [
+                "94cc6f34ae6174a1"
+            ]
+        ]
+    },
+    {
+        "id": "cc1770f36a5be1ca",
+        "type": "ui_button",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "group": "9967d2c959ab2f10",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Oauth2",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "url",
+        "payloadType": "str",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 200,
+        "y": 160,
+        "wires": [
+            [
+                "94cc6f34ae6174a1"
+            ]
+        ]
+    },
+    {
+        "id": "f21c2eb286851734",
+        "type": "debug",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "30b1aabe626dada7",
+        "type": "inject",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "props": [
+            {
+                "p": "url",
+                "v": "",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 210,
+        "y": 200,
+        "wires": [
+            [
+                "94cc6f34ae6174a1"
+            ]
+        ]
+    },
+    {
+        "id": "94cc6f34ae6174a1",
+        "type": "subflow:7dc49beefc960324",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "env": [
+            {
+                "name": "scope",
+                "value": "farm_manager",
+                "type": "str"
+            },
+            {
+                "name": "url",
+                "value": "http://192.168.1.34.nip.io",
+                "type": "str"
+            },
+            {
+                "name": "redirect",
+                "value": "https://192.168.1.22.nip.io:1880/farmos/callback",
+                "type": "str"
+            },
+            {
+                "name": "client",
+                "type": "cred"
+            },
+            {
+                "name": "secret",
+                "type": "cred"
+            },
+            {
+                "name": "username",
+                "type": "cred"
+            },
+            {
+                "name": "password",
+                "type": "cred"
+            }
+        ],
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "f21c2eb286851734",
+                "cc8db8c6ea681f3a"
+            ],
+            [
+                "47c581e6fac2e089"
+            ]
+        ]
+    },
+    {
+        "id": "47c581e6fac2e089",
+        "type": "ui_template",
+        "z": "a288bc4cb4e3037b",
+        "group": "9967d2c959ab2f10",
+        "name": "",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "format": "<script>\n(function(scope) {\n    scope.$watch('msg.payload', function(data) {\n        if (data.includes(\"oauth\")) {\n          window.location.href = data;\n        } \n    });\n})(scope);\n</script>",
+        "storeOutMessages": true,
+        "fwdInMessages": true,
+        "resendOnRefresh": false,
+        "templateScope": "local",
+        "className": "",
+        "x": 620,
+        "y": 200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cc8db8c6ea681f3a",
+        "type": "ui_text",
+        "z": "a288bc4cb4e3037b",
+        "group": "9967d2c959ab2f10",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "",
+        "format": "{{msg.payload}}",
+        "layout": "row-spread",
+        "className": "",
+        "x": 610,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "269042edefaf5ab5",
+        "type": "subflow:658a10db51914bd5",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "env": [
+            {
+                "name": "Source",
+                "value": "global",
+                "type": "str"
+            },
+            {
+                "name": "API",
+                "value": "API_selection",
+                "type": "str"
+            }
+        ],
+        "x": 590,
+        "y": 420,
+        "wires": [
+            [
+                "1c3a3756984457c7"
+            ]
+        ]
+    },
+    {
+        "id": "ca6396100050a1f8",
+        "type": "ui_dropdown",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "label": "Filter",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "1f1854535a1df972",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 430,
+        "y": 420,
+        "wires": [
+            [
+                "269042edefaf5ab5",
+                "34cfc598a9d09ab0"
+            ]
+        ]
+    },
+    {
+        "id": "1c3a3756984457c7",
+        "type": "debug",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "a8e40e8d18c18fbe",
+        "type": "subflow:3d22b1cdeadc9255",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "env": [
+            {
+                "name": "File",
+                "value": "/home/pi/filters.json",
+                "type": "str"
+            },
+            {
+                "name": "Section",
+                "value": "asset_filters",
+                "type": "str"
+            }
+        ],
+        "x": 260,
+        "y": 420,
+        "wires": [
+            [
+                "ca6396100050a1f8"
+            ]
+        ]
+    },
+    {
+        "id": "bb4aa7d963915949",
+        "type": "inject",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 340,
+        "wires": [
+            [
+                "6450171b7e6d64d4"
+            ]
+        ]
+    },
+    {
+        "id": "20aff622de3a55af",
+        "type": "ui_dropdown",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "label": "Endpoint",
+        "tooltip": "",
+        "place": "Select option",
+        "group": "1f1854535a1df972",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "multiple": false,
+        "options": [],
+        "payload": "",
+        "topic": "topic",
+        "topicType": "msg",
+        "className": "",
+        "x": 420,
+        "y": 340,
+        "wires": [
+            [
+                "4560c5d7b53cb609"
+            ]
+        ]
+    },
+    {
+        "id": "63b5af0fd42ad060",
+        "type": "debug",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "6450171b7e6d64d4",
+        "type": "subflow:658a10db51914bd5",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "env": [
+            {
+                "name": "API Source",
+                "value": "global",
+                "type": "str"
+            }
+        ],
+        "x": 250,
+        "y": 340,
+        "wires": [
+            [
+                "20aff622de3a55af"
+            ]
+        ]
+    },
+    {
+        "id": "dbcb644105fe96c1",
+        "type": "inject",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 420,
+        "wires": [
+            [
+                "a8e40e8d18c18fbe"
+            ]
+        ]
+    },
+    {
+        "id": "4560c5d7b53cb609",
+        "type": "subflow:1fd1c96cd5878a7a",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "env": [
+            {
+                "name": "selection",
+                "value": "API_selection",
+                "type": "str"
+            }
+        ],
+        "x": 600,
+        "y": 340,
+        "wires": [
+            [
+                "63b5af0fd42ad060"
+            ]
+        ]
+    },
+    {
+        "id": "c352898ea1a73da7",
+        "type": "subflow:658a10db51914bd5",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "env": [
+            {
+                "name": "API Source",
+                "value": "msgpay",
+                "type": "str"
+            }
+        ],
+        "x": 590,
+        "y": 580,
+        "wires": [
+            [
+                "db53e7409e3b2083"
+            ]
+        ]
+    },
+    {
+        "id": "93e7fe14d509e353",
+        "type": "inject",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 410,
+        "y": 580,
+        "wires": [
+            [
+                "c352898ea1a73da7"
+            ]
+        ]
+    },
+    {
+        "id": "34cfc598a9d09ab0",
+        "type": "subflow:1fd1c96cd5878a7a",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "env": [
+            {
+                "name": "selection",
+                "value": "Flow_selection",
+                "type": "str"
+            }
+        ],
+        "x": 600,
+        "y": 480,
+        "wires": [
+            [
+                "35f93e03a815c7e0"
+            ]
+        ]
+    },
+    {
+        "id": "35f93e03a815c7e0",
+        "type": "debug",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 790,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "db53e7409e3b2083",
+        "type": "debug",
+        "z": "a288bc4cb4e3037b",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "9967d2c959ab2f10",
+        "type": "ui_group",
+        "name": "farmOS Oauth2",
+        "tab": "8753d5a904fda032",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "1f1854535a1df972",
+        "type": "ui_group",
+        "name": "API",
+        "tab": "8753d5a904fda032",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "8753d5a904fda032",
+        "type": "ui_tab",
+        "name": "farmOS Oauth2",
+        "icon": "fa-leaf",
+        "order": 4,
+        "disabled": false,
+        "hidden": false
+    }
+]
