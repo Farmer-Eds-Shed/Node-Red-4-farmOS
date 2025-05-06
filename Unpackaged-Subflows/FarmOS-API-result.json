@@ -1,0 +1,248 @@
+[
+    {
+        "id": "6dfa64bb3b0f47b4",
+        "type": "subflow",
+        "name": "farmos API result",
+        "info": "An OK/Cancel notification pops up after\nthe api request is made\n\nChecks if status code is 201 or not.\n\nInput = the result of the FarmOS API request\nIf msg.topic is not empty, the topic is used as\nsuccess message.\n\nOptional outputs\n1. output = success\n2. output = error\n\n",
+        "category": "farmOS",
+        "in": [
+            {
+                "x": 60,
+                "y": 100,
+                "wires": [
+                    {
+                        "id": "9cad4d8ae2685c80"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 880,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "9ead23c4d6f52d1b",
+                        "port": 0
+                    }
+                ]
+            },
+            {
+                "x": 890,
+                "y": 120,
+                "wires": [
+                    {
+                        "id": "22a22f1c8ef6328a",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "Success message",
+                "type": "str",
+                "value": ""
+            },
+            {
+                "name": "Error message",
+                "type": "str",
+                "value": ""
+            }
+        ],
+        "meta": {
+            "desc": "Checks result from farmOS API request"
+        },
+        "color": "#D7D7A0",
+        "inputLabels": [
+            "farmOS API"
+        ],
+        "outputLabels": [
+            "Ok",
+            "Error"
+        ],
+        "icon": "font-awesome/fa-leaf"
+    },
+    {
+        "id": "9ead23c4d6f52d1b",
+        "type": "ui_toast",
+        "z": "6dfa64bb3b0f47b4",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "Cancel",
+        "raw": true,
+        "className": "",
+        "topic": "",
+        "name": "The log was saved",
+        "x": 710,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9cad4d8ae2685c80",
+        "type": "switch",
+        "z": "6dfa64bb3b0f47b4",
+        "name": "Result",
+        "property": "statusCode",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "201",
+                "vt": "num"
+            },
+            {
+                "t": "neq",
+                "v": "201",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 190,
+        "y": 100,
+        "wires": [
+            [
+                "6a0c818f9c2d2631"
+            ],
+            [
+                "74b9e9878d9a4fa4"
+            ]
+        ]
+    },
+    {
+        "id": "22a22f1c8ef6328a",
+        "type": "ui_toast",
+        "z": "6dfa64bb3b0f47b4",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "sendall": true,
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "Cancel",
+        "raw": true,
+        "className": "",
+        "topic": "",
+        "name": "Error",
+        "x": 750,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3e8522a5678016bc",
+        "type": "change",
+        "z": "6dfa64bb3b0f47b4",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "Success message",
+                "tot": "env"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 490,
+        "y": 80,
+        "wires": [
+            [
+                "9ead23c4d6f52d1b"
+            ]
+        ]
+    },
+    {
+        "id": "74b9e9878d9a4fa4",
+        "type": "change",
+        "z": "6dfa64bb3b0f47b4",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "Error message",
+                "tot": "env"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 490,
+        "y": 120,
+        "wires": [
+            [
+                "22a22f1c8ef6328a"
+            ]
+        ]
+    },
+    {
+        "id": "6a0c818f9c2d2631",
+        "type": "switch",
+        "z": "6dfa64bb3b0f47b4",
+        "name": "",
+        "property": "topic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nempty"
+            },
+            {
+                "t": "empty"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 330,
+        "y": 80,
+        "wires": [
+            [
+                "236a6b3962e1f288"
+            ],
+            [
+                "3e8522a5678016bc"
+            ]
+        ]
+    },
+    {
+        "id": "0361037a82613272",
+        "type": "subflow:6dfa64bb3b0f47b4",
+        "z": "f87a7ce523f31392",
+        "name": "farmOS API result",
+        "env": [
+            {
+                "name": "Success message",
+                "value": "Lagret",
+                "type": "str"
+            },
+            {
+                "name": "Error message",
+                "value": "Noe gikk galt",
+                "type": "str"
+            }
+        ],
+        "x": 1370,
+        "y": 360,
+        "wires": [
+            [],
+            []
+        ]
+    }
+]
